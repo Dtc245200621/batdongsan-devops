@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="vi"><head><meta charset="utf-8">
+<title>BĐS Online</title>
+<style>
+ body{font-family:Arial,sans-serif;max-width:960px;margin:20px auto;padding:0 12px}
+ .card{border:1px solid #ddd;padding:12px;margin:10px 0;border-radius:6px}
+ input,select,button{padding:6px;margin:4px}
+ .price{color:#c0392b;font-weight:bold}
+</style></head><body>
+<h1><a href="/" style="text-decoration:none">🏠 BĐS Online</a></h1>
+<a href="/post">+ Đăng tin</a>
+<form method="get" action="/">
+  <input name="q" placeholder="Từ khóa" value="<%= query.q || '' %>">
+  <input name="city" placeholder="Thành phố" value="<%= query.city || '' %>">
+  <select name="type">
+    <option value="">Tất cả loại</option>
+    <% ['Nhà','Đất','Căn hộ'].forEach(t => { %>
+      <option <%= query.type===t ? 'selected' : '' %>><%= t %></option>
+    <% }) %>
+  </select>
+  <input name="min" type="number" placeholder="Giá từ (VNĐ)" value="<%= query.min || '' %>">
+  <input name="max" type="number" placeholder="Giá đến (VNĐ)" value="<%= query.max || '' %>">
+  <button>Tìm kiếm</button>
+</form>
+<p>Tìm thấy <b><%= listings.length %></b> tin</p>
+<% listings.forEach(l => { %>
+  <div class="card">
+    <h3><a href="/listings/<%= l.id %>"><%= l.title %></a></h3>
+    <div><%= l.type %> · <%= l.city %> · <%= l.address %> · <%= l.area %> m²</div>
+    <div class="price"><%= Number(l.price).toLocaleString('vi-VN') %> đ</div>
+  </div>
+<% }) %>
+</body></html>
