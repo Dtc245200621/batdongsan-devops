@@ -3,3 +3,4 @@ node_modules/
 *.log
 certs/*.key
 *.bak
+mysqld-exporter/.my.cnf
