@@ -121,7 +121,35 @@ services:
       db:
         condition: service_healthy
 
+  # ---------- Logging ----------
+  loki:
+    image: grafana/loki:3.1.1
+    container_name: bds_loki
+    restart: unless-stopped
+    command:
+      - "-config.file=/etc/loki/loki-config.yml"
+    volumes:
+      - ./loki/loki-config.yml:/etc/loki/loki-config.yml:ro
+      - loki_data:/loki
+    ports:
+      - "127.0.0.1:3100:3100"
+
+  promtail:
+    image: grafana/promtail:3.1.1
+    container_name: bds_promtail
+    restart: unless-stopped
+    command:
+      - "-config.file=/etc/promtail/promtail-config.yml"
+    volumes:
+      - ./promtail/promtail-config.yml:/etc/promtail/promtail-config.yml:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - promtail_data:/positions
+    depends_on:
+      - loki
+
 volumes:
   db_data:
   prometheus_data:
   grafana_data:
+  loki_data:
+  promtail_data:
