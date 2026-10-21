@@ -96,7 +96,7 @@ sum by (status) (count_over_time({service="nginx"} | pattern `<ip> - <user> [<_>
 | Biện pháp | Chi tiết |
 |---|---|
 | Mật khẩu mạnh | 32 ký tự ngẫu nhiên (`openssl rand -hex 16`), lưu trong `.env` (quyền 600, không commit) |
-| Non-root container | App chạy user `node`; Grafana, Loki, Prometheus, các exporter chạy user không phải root |
+| Non-root container | App chạy user `node`; Grafana, Loki, Prometheus, mysqld-exporter, nginx-exporter chạy user không phải root (cAdvisor và Promtail cần root, xem mục Rủi ro còn lại) |
 | Giới hạn quyền container | `no-new-privileges` cho mọi service; app thêm `read_only` và `cap_drop: ALL` |
 | Network isolation | 5 mạng riêng (`frontend`, `backend`, `admin`, `monitoring`, `logging`); `backend` là `internal` nên DB không ra được internet, Nginx không thấy DB |
 | Hạn chế quyền DB | `bds_user` chỉ có SELECT/INSERT/UPDATE/DELETE; xóa `root@'%'`; user `exporter` quyền tối thiểu và tối đa 3 kết nối |

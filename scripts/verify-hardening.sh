@@ -11,9 +11,13 @@ echo
 echo "=================== 2. NON-ROOT CONTAINER ==================="
 echo "--- bds_app:"
 docker compose exec -T app id
-for c in bds_grafana bds_loki bds_prometheus bds_nginx_exporter bds_mysqld_exporter bds_db; do
-  echo "--- $c (user cua tien trinh chinh):"
-  docker top $c -eo user,comm | sed -n '2,3p'
+echo "--- User cau hinh cua tung container (trong = mac dinh root):"
+for c in $(docker ps --format '{{.Names}}'); do
+  printf "%-22s USER=%s\n" "$c" "$(docker inspect -f '{{if .Config.User}}{{.Config.User}}{{else}}(root){{end}}' $c)"
+done
+echo "--- User thuc te dang chay trong container:"
+for sv in grafana loki prometheus; do
+  printf "%-12s " "$sv"; docker compose exec -T $sv id 2>/dev/null || echo "(khong co lenh id)"
 done
 
 echo
